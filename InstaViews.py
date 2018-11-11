@@ -45,41 +45,48 @@ def menu_bot():
 
 def start():
     postUrl = input('[+] Post URL: ')
-    r = requests.get('https://igpro.me/ajax/getPostInformation?media='+postUrl)
-    info = r.text
-    x = ast.literal_eval(info)
-    pID = x['media_code']
-    data = {'media_code': pID, 'count': '3000', 'required':'10000' }
-    print('[+] Starting Server 01')
-    r = requests.get('https://igsub.me/robotControl')
-    print('[+] Home Page - Start')
-    r = requests.get('https://igsub.me')
-    print('[+] Loading...')
-    r = requests.get('https://igsub.me/postViews')
-    print('[+] Process Started.')
-    r = requests.post('https://igsub.me/posts/postViews', data = data)
-    print('[+] Please wait...')
-    if 'completed' in r.text:
-        print('[+] Completed.')
-        print('[+] Server 02 START...')
-    else:
-          print('[-] Failed - Trying Second Server')
-    print('[+] Starting Server 02')
-    r = requests.get('https://igpro.me/robotControl')
-    print('[+] Home Page - Start')
-    r = requests.get('https://igpro.me')
-    print('[+] Loading...')
-    r = requests.get('https://igpro.me/postViews')
-    print('[+] Process Started.')
-    r = requests.post('https://igpro.me/posts/postViews', data = data)
-    print('[+] Please wait...')
-    response=r.text
-    if 'completed' in r.text:
-        print('[+] Completed.')
-        print('[+] Going Again :)')
-        start()
-    else:
-          print('[-] Failed - Script will restart.')
-          start()
+    code = postUrl
+    print(code)
+    def run(code):
+        newCode = code
+        print('[+] Getting Media ID...')
+        r = requests.get('https://igpro.me/robotControl')
+        r = requests.get('https://igpro.me/ajax/getPostInformation?media='+newCode)
+        info = r.text
+        x = ast.literal_eval(info)
+        pID = x['media_code']
+        data = {'media_code': pID, 'count': '3000', 'required':'10000' }
+        print('[+] Starting Server 01')
+        r = requests.get('https://igsub.me/robotControl')
+        print('[+] Home Page - Start')
+        r = requests.get('https://igsub.me')
+        print('[+] Loading...')
+        r = requests.get('https://igsub.me/postViews')
+        print('[+] Process Started.')
+        r = requests.post('https://igsub.me/posts/postViews', data = data)
+        print('[+] Please wait...')
+        if 'completed' in r.text:
+            print('[+] Completed.')
+            print('[+] Server 02 START...')
+        else:
+              print('[-] Failed - Trying Second Server')
+        print('[+] Starting Server 02')
+        r = requests.get('https://igpro.me/robotControl')
+        print('[+] Home Page - Start')
+        r = requests.get('https://igpro.me')
+        print('[+] Loading...')
+        r = requests.get('https://igpro.me/postViews')
+        print('[+] Process Started.')
+        r = requests.post('https://igpro.me/posts/postViews', data = data)
+        print('[+] Please wait...')
+        response=r.text
+        if 'completed' in r.text:
+            print('[+] Completed.')
+            print('[+] Going Again :)')
+            run(newCode)
+        else:
+              print('[-] Failed - Script will restart.')
+              run(newCode)
+    run(code)
 
 menu_bot()
