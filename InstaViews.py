@@ -1,26 +1,26 @@
-import requests, os
+import requests, os, sys, ast
 
 ###################################################################
 #                             COLOR
 if sys.platform in ["linux","linux2"]:
-	W = "\033[0m"
-        G = '\033[32;1m'
-        R = '\033[31;1m'
+    W = "\033[0m"
+    G = "\033[32;1m"
+    R = "\033[31;1m"
 else:
-	W = ''
-	G = ''
-	R = ''
+    W = ''
+    G = ''
+    R = ''
 ###################################################################
-print R + '_     _'.center(44)
-print "o' \.=./ `o".center(44)
-print '(o o)'.center(44)
-print 'ooO--(_)--Ooo'.center(44)
-print W + ' '
-print ('A L - K I N G').center(44)
-print ('> A R A S H').center(44)
-print ' '
+print (R + '_     _'.center(44))
+print ("o' \.=./ `o".center(44))
+print ('(o o)'.center(44))
+print ('ooO--(_)--Ooo'.center(44))
+print (W + ' ')
+print ('A L - K I N G'.center(44))
+print ('> A R A S H'.center(44))
+print (' ')
 def menu_bot():
-	print '''
+    print ('''
    Number                  INFO
  ---------   ------------------------------------
    [ 01 ]      Instagram Views
@@ -30,8 +30,8 @@ def menu_bot():
    [ 05 ]      Instagram Post Saves
    [ 06 ]      Instagram Story Viewers
    [ 00 ]      Exit
-'''%(G,W)
-    y = input('3Rash': )
+''')
+    y = input('3Rash: ' )
     if y == '1':
         start()
     elif y == '01':
@@ -44,8 +44,11 @@ def menu_bot():
         sys.exit()
 
 def start():
-    
-    pID = input('[+] Post ID: ')
+    postUrl = input('[+] Post URL: ')
+    r = requests.get('https://igpro.me/ajax/getPostInformation?media='+postUrl)
+    info = r.text
+    x = ast.literal_eval(info)
+    pID = x['media_code']
     data = {'media_code': pID, 'count': '3000', 'required':'10000' }
     print('[+] Starting Server 01')
     r = requests.get('https://igsub.me/robotControl')
@@ -56,7 +59,6 @@ def start():
     print('[+] Process Started.')
     r = requests.post('https://igsub.me/posts/postViews', data = data)
     print('[+] Please wait...')
-    print(r.text)
     if 'completed' in r.text:
         print('[+] Completed.')
         print('[+] Server 02 START...')
@@ -75,9 +77,9 @@ def start():
     if 'completed' in r.text:
         print('[+] Completed.')
         print('[+] Going Again :)')
-        start(data)
+        start()
     else:
           print('[-] Failed - Script will restart.')
           start()
 
-start()
+menu_bot()
