@@ -55,7 +55,7 @@ def start():
         info = r.text
         x = ast.literal_eval(info)
         pID = x['media_code']
-        data = {'media_code': pID, 'count': '3000', 'required':'10000' }
+        data = {'media_code': pID, 'count': 'speedbooster', 'required':'10000' }
         print('[+] Starting Server 01')
         r = requests.get('https://igsub.me/robotControl')
         print('[+] Home Page - Start')
